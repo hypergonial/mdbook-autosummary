@@ -11,6 +11,8 @@ use mdbook_autosummary::AutoSummary;
 
 mod logger;
 
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
 pub fn make_app() -> Command {
     Command::new("mdbook-autosummary")
         .about("A mdbook preprocessor which generates a SUMMARY.md for your book based on the folder structure")
@@ -18,6 +20,10 @@ pub fn make_app() -> Command {
             Command::new("supports")
                 .arg(Arg::new("renderer").required(true))
                 .about("Check whether a renderer is supported by this preprocessor"),
+        )
+        .subcommand(
+            Command::new("version").long_flag("version")
+                .about("Print the version of this preprocessor"),
         )
 }
 
@@ -30,6 +36,9 @@ fn main() {
 
     if let Some(sub_args) = matches.subcommand_matches("supports") {
         handle_supports(&preprocessor, sub_args);
+    } else if matches.subcommand_matches("version").is_some() {
+        println!("mdbook-autosummary v{}", VERSION);
+        process::exit(0);
     } else if let Err(e) = handle_preprocessing(&preprocessor) {
         error!("{}", e);
         process::exit(1);
