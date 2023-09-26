@@ -1,0 +1,146 @@
+# Based on https://github.com/tommilligan/mdbook-admonish/blob/main/.github/workflows/deploy.yml
+
+name: Deploy
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  CRATE_NAME: mdbook-autosummary
+
+jobs:
+  # Build sources for every OS
+  github_build:
+    name: Build release binaries
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: aarch64-unknown-linux-musl
+            os: ubuntu-latest
+            name: aarch64-unknown-linux-musl.tar.gz
+          - target: x86_64-unknown-linux-gnu
+            # Deliberately pinned to the same version `mdbook` uses to build
+            # binaries, so we use the same glibc version
+            #
+            # ref: https://github.com/rust-lang/mdBook/pull/1955
+            os: ubuntu-20.04
+            name: x86_64-unknown-linux-gnu.tar.gz
+          - target: x86_64-unknown-linux-musl
+            os: ubuntu-latest
+            name: x86_64-unknown-linux-musl.tar.gz
+          - target: x86_64-apple-darwin
+            os: macOS-latest
+            name: x86_64-apple-darwin.tar.gz
+          - target: x86_64-pc-windows-msvc
+            os: windows-latest
+            name: x86_64-pc-windows-msvc.zip
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+
+      # Cache files between builds
+      - name: Setup | Cache Cargo
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Setup | Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+          profile: minimal
+          target: ${{ matrix.target }}
+
+      - name: Setup | cross
+        if: endsWith(matrix.target, '-unknown-linux-musl')
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cross
+
+      - name: Build | Build
+        if: ${{ !endsWith(matrix.target, '-unknown-linux-musl') }}
+        run: cargo build --release --target ${{ matrix.target }}
+
+      - name: Build | Build (musl)
+        if: endsWith(matrix.target, '-unknown-linux-musl')
+        run: cross build --release --target ${{ matrix.target }}
+
+      - name: Post Setup | Extract tag name
+        shell: bash
+        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        id: extract_tag
+
+      - name: Post Setup | Prepare artifacts [Windows]
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir target/stage
+          cd target/${{ matrix.target }}/release
+          7z a ../../stage/${{ env.CRATE_NAME }}-${{ steps.extract_tag.outputs.tag }}-${{ matrix.name }} ${{ env.CRATE_NAME }}.exe
+          cd -
+      - name: Post Setup | Prepare artifacts [-nix]
+        if: matrix.os != 'windows-latest'
+        run: |
+          mkdir target/stage
+          cd target/${{ matrix.target }}/release
+          tar czvf ../../stage/${{ env.CRATE_NAME }}-${{ steps.extract_tag.outputs.tag }}-${{ matrix.name }} ${{ env.CRATE_NAME }}
+          cd -
+      - name: Post Setup | Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ env.CRATE_NAME }}-${{ steps.extract_tag.outputs.tag }}-${{ matrix.name }}
+          path: target/stage/*
+
+  # Create GitHub release with Rust build targets and release notes
+  github_release:
+    name: Create GitHub Release
+    needs: github_build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup | Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup | Artifacts
+        uses: actions/download-artifact@v3
+
+      - name: Setup | Extract version
+        shell: bash
+        run: echo "##[set-output name=version;]$(echo ${GITHUB_REF#refs/tags/v})"
+        id: extract_version
+
+      - name: Setup | Release notes
+        run: |
+          cat CHANGELOG.md | sed -n '/^## ${{ steps.extract_version.outputs.version }}$/,/^## /p' | sed '$d' > RELEASE.md
+        
+      - name: Build | Publish
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.CRATE_NAME }}-*/${{ env.CRATE_NAME }}-*
+          body_path: RELEASE.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Upload to crates.io
+  publish:
+    name: Publish to crates.io
+    needs: github_release
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - name: Publish crate
+        uses: katyo/publish-crates@v2
+        with:
+          registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
