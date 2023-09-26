@@ -48,9 +48,6 @@ impl AutoSummary {
         };
         doc.relative_to(src)
             .expect("Failed to turn absolute paths into relative");
-        eprintln!("----");
-        eprintln!("{}", doc);
-        eprintln!("----");
 
         let mut gen = doc.to_string().trim_end().to_string();
         gen.push('\n');
