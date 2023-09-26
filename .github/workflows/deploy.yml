@@ -71,10 +71,12 @@ jobs:
       - name: Build | Build (musl)
         if: endsWith(matrix.target, '-unknown-linux-musl')
         run: cross build --release --target ${{ matrix.target }}
-
-      - name: Post Setup | Extract tag name
+      
+      - name: "Post Setup | Extract tag name"
         shell: bash
-        run: echo "##[set-output name=tag;]$(echo ${GITHUB_REF#refs/tags/})"
+        run: |
+          tag=$(echo ${GITHUB_REF#refs/tags/})
+          echo "tag=$tag" >> $GITHUB_OUTPUT
         id: extract_tag
 
       - name: Post Setup | Prepare artifacts [Windows]
@@ -110,15 +112,17 @@ jobs:
 
       - name: Setup | Artifacts
         uses: actions/download-artifact@v3
-
+      
       - name: Setup | Extract version
         shell: bash
-        run: echo "##[set-output name=version;]$(echo ${GITHUB_REF#refs/tags/v})"
+        run: |
+          version=$(echo ${GITHUB_REF#refs/tags/v})
+          echo "version=$version" >> $GITHUB_OUTPUT
         id: extract_version
 
       - name: Setup | Release notes
         run: |
-          cat CHANGELOG.md | sed -n '/^## ${{ steps.extract_version.outputs.version }}$/,/^## /p' | sed '$d' > RELEASE.md
+          cat CHANGELOG.md | sed -n "/^## ${{ steps.extract_version.outputs.version }}$/,/^## /p" > RELEASE.md
         
       - name: Build | Publish
         uses: softprops/action-gh-release@v1
