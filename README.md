@@ -70,19 +70,7 @@ To use the preprocessor, add the following to your `book.toml` file:
 create-missing = false
 ```
 
-### Usage with other preprocessors
-
-> [!WARNING]
-> This MUST be the first preprocessor to run, otherwise the outputs of other preprocessors may be ignored!
-
-To ensure this, add the following to the other preprocessors in your `book.toml` file:
-
-```toml
-[preprocessor.foo]
-after = ["autosummary"]
-```
-
-It is also recommended to add `SUMMARY.md` to `.gitignore`.
+It is additionally recommended to add `SUMMARY.md` to `.gitignore`.
 
 ### Requirements
 
@@ -90,6 +78,18 @@ It is also recommended to add `SUMMARY.md` to `.gitignore`.
   - Folders that do not have `index.md` (or equivalent) in them will be ignored.
 - All files should begin with an h1 (`# `) heading that will be used as the title of the page in the `SUMMARY.md`.
   - The file/folder's name will be used as fallback if no h1 heading is found.
+
+### Usage with other preprocessors
+
+> [!WARNING]
+> This **must** be the first preprocessor to run, otherwise the outputs of other preprocessors may be ignored!
+
+To ensure this, add the following to the other preprocessors in your `book.toml` file:
+
+```toml
+[preprocessor.foo]
+after = ["autosummary"]
+```
 
 ## Configuration
 
@@ -126,3 +126,14 @@ The side-effects of this approach are that mdBook is forced to reload the entire
 ### Why not just tell mdBook to use the new Summary you generate?
 
 The function to do that [exists](https://github.com/rust-lang/mdBook/blob/master/src/book/book.rs#L212) in `mdBook` but is unfortunately private. Given the hacky nature of this preprocessor, I don't think it's worth the effort to make a PR to `mdBook` to make it public, instead, alternative approaches to this problem should be explored. (For example adding the ability to specify the source of a summary to be an extension/preprocessor rather than a file)
+
+## Contributing
+
+Contributions are welcome! Please open an issue or a PR if you have any suggestions or improvements.
+
+### Creating new releases
+
+1. Update the version in `Cargo.toml`
+2. Update `CHANGELOG.md`
+3. Push a new tag with the version number, prefixed with `v` (e.g. `v0.1.0`)
+4. CD will automatically build & publish the new version to crates.io & github
