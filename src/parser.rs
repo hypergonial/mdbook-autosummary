@@ -191,7 +191,7 @@ impl Display for DocFolder {
             .iter()
             .filter(|c| matches!(c, DocStructure::File(_)))
         {
-            writeln!(f, "{}", child)?;
+            write!(f, "{}", child)?;
         }
 
         for child in self
@@ -199,7 +199,7 @@ impl Display for DocFolder {
             .iter()
             .filter(|c| matches!(c, DocStructure::Folder(_)))
         {
-            writeln!(f, "{}", child)?;
+            write!(f, "{}", child)?;
         }
 
         Ok(())
@@ -274,10 +274,10 @@ impl Display for DocFile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // If this file is in the src root
         if self.depth == 0 || self.depth == 1 {
-            return write!(f, "[{}]({})", self.title, self.path.display());
+            return writeln!(f, "[{}]({})", self.title, self.path.display());
         }
 
-        write!(
+        writeln!(
             f,
             "{}- [{}]({})",
             " ".repeat(((self.depth - 1) as usize) * 2),
