@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.3
+
+- Update mdbook to `0.4.35` along with other dependencies.
+
 ## 0.1.2
 
 - Add `--version` flag to CLI to print version
