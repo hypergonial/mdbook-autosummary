@@ -206,6 +206,7 @@ impl Display for DocFolder {
     }
 }
 
+/// Represents a .md file inside the mdbook src folder
 #[derive(Debug, Clone)]
 pub struct DocFile {
     /// The title of the file, extracted from the first h1 heading
@@ -230,6 +231,7 @@ impl DocFile {
     ///
     /// If the file has an h1 heading, that will be used as the title.
     /// If the file doesn't exist at the given path, this function returns None.
+    /// If the file doesn't have a .md extension, this function returns None.
     pub fn from_path(path: &Path, config: &Config, depth: u16) -> Option<Self> {
         if !path.is_file() {
             return None;
