@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix paths not being separated by `/` on Windows.
+
 ## 0.1.3
 
 - Update mdbook to `0.4.35` along with other dependencies.

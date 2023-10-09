@@ -7,6 +7,7 @@ use std::{
 
 use anyhow::Error;
 use log::warn;
+use path_slash::PathExt;
 use walkdir::WalkDir;
 
 use crate::Config;
@@ -174,14 +175,14 @@ impl Display for DocFolder {
         let index = self.path.join(&self.index);
         // If this is the src folder
         if self.depth == 0 {
-            writeln!(f, "[{}]({})", self.title, index.display())?;
+            writeln!(f, "[{}]({})", self.title, index.to_slash_lossy())?;
         } else {
             writeln!(
                 f,
                 "{}- [{}]({})",
                 " ".repeat(((self.depth - 1) as usize) * 2),
                 self.title,
-                index.display()
+                index.to_slash_lossy()
             )?;
         }
 
@@ -276,7 +277,7 @@ impl Display for DocFile {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         // If this file is in the src root
         if self.depth == 0 || self.depth == 1 {
-            return writeln!(f, "[{}]({})", self.title, self.path.display());
+            return writeln!(f, "[{}]({})", self.title, self.path.to_slash_lossy());
         }
 
         writeln!(
@@ -284,7 +285,7 @@ impl Display for DocFile {
             "{}- [{}]({})",
             " ".repeat(((self.depth - 1) as usize) * 2),
             self.title,
-            self.path.display()
+            self.path.to_slash_lossy()
         )
     }
 }
