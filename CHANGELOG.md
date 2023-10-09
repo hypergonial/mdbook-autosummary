@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.4
+
 - Fix paths not being separated by `/` on Windows.
 
 ## 0.1.3
