@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Enable LTO on release builds for smaller binary size.
+
 ## 0.1.4
 
 - Fix paths not being separated by `/` on Windows.

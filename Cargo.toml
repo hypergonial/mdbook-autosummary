@@ -1,6 +1,6 @@
 [package]
 name = "mdbook-autosummary"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
 authors = ["hypergonial"]
 rust-version = "1.70"
@@ -27,3 +27,7 @@ serde_derive = "1.0.188"
 serde_json = "1.0.107"
 sha2 = "0.10.7"
 walkdir = "2.4.0"
+
+# Enable LTO for smaller binaries
+[profile.release]
+lto = true
