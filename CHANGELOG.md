@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Update dependencies
 - Enable LTO on release builds for smaller binary size.
 
 ## 0.1.4
