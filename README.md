@@ -47,6 +47,10 @@ is turned into
 
 ## Installation
 
+### Binaries
+
+The binaries are available in the [GitHub releases section](https://github.com/hypergonial/mdbook-autosummary/releases) for all major platforms.
+
 ### From source
 
 To install from source, you need a working installation of the [Rust toolchain](https://rustup.rs/)
