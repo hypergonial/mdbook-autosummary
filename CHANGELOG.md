@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.6
+
+- Bump mdbook to `0.4.36` along with other dependencies.
+
 ## 0.1.5
 
 - Update dependencies

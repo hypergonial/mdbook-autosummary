@@ -1,6 +1,6 @@
 [package]
 name = "mdbook-autosummary"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["hypergonial"]
 rust-version = "1.70"
@@ -17,9 +17,9 @@ categories = ["parsing", "filesystem", "config"]
 anyhow = "1.0.75"
 chrono = "0.4.31"
 clap = "4.4.4"
-env_logger = "0.10.0"
+env_logger = "0.11.1"
 log = "0.4.20"
-mdbook = "0.4.34"
+mdbook = "0.4.36"
 path-slash = "0.2.1"
 semver = "1.0.19"
 serde = "1.0.188"
