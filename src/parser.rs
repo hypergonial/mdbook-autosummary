@@ -262,7 +262,10 @@ impl DocFile {
         // Try to find an h1 heading
         for line in lines {
             if line.starts_with("# ") {
-                let title = line.trim_start_matches("# ").to_string();
+                let mut title = .split_once("# ").expect("Chapter title heading not found.").1;
+                if let Some((title_without_comment, _)) = title.split_once("<!--") {
+                    title = title_without_comment;
+                }
                 return Some(Self::new(title, path.to_path_buf(), depth));
             }
         }
