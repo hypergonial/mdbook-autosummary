@@ -262,7 +262,7 @@ impl DocFile {
         // Try to find an h1 heading
         for line in lines {
             if line.starts_with("# ") {
-                let mut title = .split_once("# ").expect("Chapter title heading not found.").1;
+                let (mut title, _) = line.split_once("# ").expect("Chapter title heading not found.");
                 if let Some((title_without_comment, _)) = title.split_once("<!--") {
                     title = title_without_comment;
                 }
