@@ -14,19 +14,19 @@ categories = ["parsing", "filesystem", "config"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.75"
-chrono = "0.4.31"
-clap = "4.4.4"
-env_logger = "0.11.1"
-log = "0.4.20"
-mdbook = "0.4.36"
+anyhow = "1.0.86"
+chrono = "0.4.38"
+clap = "4.5.4"
+env_logger = "0.11.3"
+log = "0.4.21"
+mdbook = "0.4.40"
 path-slash = "0.2.1"
-semver = "1.0.19"
-serde = "1.0.188"
-serde_derive = "1.0.188"
-serde_json = "1.0.107"
-sha2 = "0.10.7"
-walkdir = "2.4.0"
+semver = "1.0.23"
+serde = "1.0.203"
+serde_derive = "1.0.203"
+serde_json = "1.0.117"
+sha2 = "0.10.8"
+walkdir = "2.5.0"
 
 # Enable LTO for smaller binaries
 [profile.release]
