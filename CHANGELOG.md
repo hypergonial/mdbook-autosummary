@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.1.7
+
+- Handle chapter titles with comments.
+- Bump mdbook to `0.4.40` along with other dependencies.
+
 ## 0.1.6
 
 - Bump mdbook to `0.4.36` along with other dependencies.
