@@ -238,9 +238,7 @@ impl DocFile {
             return None;
         }
 
-        let Some(filename) = path.file_name().and_then(|p| p.to_str()) else {
-            return None;
-        };
+        let filename = path.file_name().and_then(|p| p.to_str())?;
 
         if !filename.ends_with(".md") {
             return None;
@@ -262,7 +260,9 @@ impl DocFile {
         // Try to find an h1 heading
         for line in lines {
             if line.starts_with("# ") {
-                let (mut title, _) = line.split_once("# ").expect("Chapter title heading not found.");
+                let (mut title, _) = line
+                    .split_once("# ")
+                    .expect("Chapter title heading not found.");
                 if let Some((title_without_comment, _)) = title.split_once("<!--") {
                     title = title_without_comment;
                 }
