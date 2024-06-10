@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.1.8
+
+- Fix chapter titles being consumed by the parser.
+
 ## 0.1.7
 
 - Handle chapter titles with comments.
