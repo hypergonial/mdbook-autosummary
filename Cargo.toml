@@ -1,7 +1,7 @@
 [package]
 name = "mdbook-autosummary"
 version = "0.1.9"
-edition = "2021"
+edition = "2024"
 authors = ["hypergonial"]
 rust-version = "1.85"
 description = "Generate SUMMARY.md files based on your book's file structure"

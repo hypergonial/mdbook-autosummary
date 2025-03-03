@@ -244,7 +244,7 @@ impl DocFile {
             return None;
         }
 
-        if config.ignore_hidden && filename.starts_with(|c| c == '.' || c == '_') {
+        if config.ignore_hidden && filename.starts_with(['.', '_']) {
             return None;
         }
 
