@@ -1,9 +1,9 @@
 [package]
 name = "mdbook-autosummary"
-version = "0.1.8"
+version = "0.1.9"
 edition = "2021"
 authors = ["hypergonial"]
-rust-version = "1.70"
+rust-version = "1.85"
 description = "Generate SUMMARY.md files based on your book's file structure"
 readme = "README.md"
 repository = "https://github.com/hypergonial/mdbook-autosummary"
@@ -14,17 +14,17 @@ categories = ["parsing", "filesystem", "config"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.86"
-chrono = "0.4.38"
-clap = "4.5.4"
-env_logger = "0.11.3"
-log = "0.4.21"
-mdbook = "0.4.40"
+anyhow = "1.0.97"
+chrono = "0.4.40"
+clap = "4.5.31"
+env_logger = "0.11.6"
+log = "0.4.26"
+mdbook = "0.4.45"
 path-slash = "0.2.1"
-semver = "1.0.23"
-serde = "1.0.203"
-serde_derive = "1.0.203"
-serde_json = "1.0.117"
+semver = "1.0.25"
+serde = "1.0.218"
+serde_derive = "1.0.218"
+serde_json = "1.0.140"
 sha2 = "0.10.8"
 walkdir = "2.5.0"
 
