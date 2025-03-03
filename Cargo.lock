@@ -1160,7 +1160,6 @@ dependencies = [
  "log",
  "mdbook",
  "path-slash",
- "percent-encoding",
  "semver",
  "serde",
  "serde_derive",

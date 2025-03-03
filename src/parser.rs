@@ -8,14 +8,9 @@ use std::{
 use anyhow::Error;
 use log::warn;
 use path_slash::PathExt;
-use percent_encoding::{NON_ALPHANUMERIC, utf8_percent_encode};
 use walkdir::WalkDir;
 
 use crate::Config;
-
-fn url_encode(input: &str) -> String {
-    utf8_percent_encode(input, NON_ALPHANUMERIC).to_string()
-}
 
 /// Representation of an mdbook src directory entry
 /// This may be a folder or a .md file
@@ -180,19 +175,14 @@ impl Display for DocFolder {
         let index = self.path.join(&self.index);
         // If this is the src folder
         if self.depth == 0 {
-            writeln!(
-                f,
-                "[{}]({})",
-                self.title,
-                url_encode(index.to_slash_lossy().as_ref())
-            )?;
+            writeln!(f, "[{}](<{}>)", self.title, index.to_slash_lossy().as_ref())?;
         } else {
             writeln!(
                 f,
-                "{}- [{}]({})",
+                "{}- [{}](<{}>)",
                 " ".repeat(((self.depth - 1) as usize) * 2),
                 self.title,
-                url_encode(index.to_slash_lossy().as_ref())
+                index.to_slash_lossy().as_ref()
             )?;
         }
 
@@ -292,18 +282,18 @@ impl Display for DocFile {
         if self.depth == 0 || self.depth == 1 {
             return writeln!(
                 f,
-                "[{}]({})",
+                "[{}](<{}>)",
                 self.title,
-                url_encode(self.path.to_slash_lossy().as_ref())
+                self.path.to_slash_lossy().as_ref()
             );
         }
 
         writeln!(
             f,
-            "{}- [{}]({})",
+            "{}- [{}](<{}>)",
             " ".repeat(((self.depth - 1) as usize) * 2),
             self.title,
-            url_encode(self.path.to_slash_lossy().as_ref())
+            self.path.to_slash_lossy().as_ref()
         )
     }
 }
