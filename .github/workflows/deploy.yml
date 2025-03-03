@@ -120,7 +120,10 @@ jobs:
 
       - name: Setup | Release notes
         run: |
-          cat CHANGELOG.md | sed -n "/^## ${{ steps.extract_version.outputs.version }}$/,/^## /p" > RELEASE.md
+          cat CHANGELOG.md | awk -v ver="${{ steps.extract_version.outputs.version }}" 'BEGIN { header = "## " ver }
+          $0 == header { flag = 1 }
+          flag && /^## / && $0 != header { exit }
+          flag { print }' > RELEASE.md
         
       - name: Build | Publish
         uses: softprops/action-gh-release@v2

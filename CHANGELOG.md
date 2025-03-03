@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## 0.1.9
+
+- Percent-encode filenames.
+- Bump edition to `2024`.
+- Bump MSRV to `1.85.0`.
+- Bump mdbook to `0.4.45` along with other dependencies.
+
 ## 0.1.8
 
 - Fix chapter titles being consumed by the parser.
