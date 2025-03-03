@@ -4,7 +4,7 @@
 
 ## 0.1.9
 
-- Percent-encode filenames.
+- Escape filenames in `SUMMARY.md` with `<...>`.
 - Bump edition to `2024`.
 - Bump MSRV to `1.85.0`.
 - Bump mdbook to `0.4.45` along with other dependencies.
